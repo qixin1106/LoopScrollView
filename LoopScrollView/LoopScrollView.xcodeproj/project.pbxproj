@@ -13,18 +13,7 @@
 		991E43CA1A3EED4B003792CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 991E43C81A3EED4B003792CA /* Main.storyboard */; };
 		991E43CC1A3EED4B003792CA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 991E43CB1A3EED4B003792CA /* Images.xcassets */; };
 		991E43CF1A3EED4B003792CA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 991E43CD1A3EED4B003792CA /* LaunchScreen.xib */; };
-		991E43DB1A3EED4B003792CA /* LoopScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 991E43DA1A3EED4B003792CA /* LoopScrollViewTests.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		991E43D51A3EED4B003792CA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 991E43B31A3EED4B003792CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 991E43BA1A3EED4B003792CA;
-			remoteInfo = LoopScrollView;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		991E43BB1A3EED4B003792CA /* LoopScrollView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopScrollView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,20 +26,10 @@
 		991E43C91A3EED4B003792CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		991E43CB1A3EED4B003792CA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		991E43CE1A3EED4B003792CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		991E43D41A3EED4B003792CA /* LoopScrollViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopScrollViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		991E43D91A3EED4B003792CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		991E43DA1A3EED4B003792CA /* LoopScrollViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoopScrollViewTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		991E43B81A3EED4B003792CA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		991E43D11A3EED4B003792CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -64,7 +43,6 @@
 			isa = PBXGroup;
 			children = (
 				991E43BD1A3EED4B003792CA /* LoopScrollView */,
-				991E43D71A3EED4B003792CA /* LoopScrollViewTests */,
 				991E43BC1A3EED4B003792CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				991E43BB1A3EED4B003792CA /* LoopScrollView.app */,
-				991E43D41A3EED4B003792CA /* LoopScrollViewTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,23 +79,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		991E43D71A3EED4B003792CA /* LoopScrollViewTests */ = {
-			isa = PBXGroup;
-			children = (
-				991E43DA1A3EED4B003792CA /* LoopScrollViewTests.m */,
-				991E43D81A3EED4B003792CA /* Supporting Files */,
-			);
-			path = LoopScrollViewTests;
-			sourceTree = "<group>";
-		};
-		991E43D81A3EED4B003792CA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				991E43D91A3EED4B003792CA /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -139,24 +99,6 @@
 			productReference = 991E43BB1A3EED4B003792CA /* LoopScrollView.app */;
 			productType = "com.apple.product-type.application";
 		};
-		991E43D31A3EED4B003792CA /* LoopScrollViewTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 991E43E11A3EED4B003792CA /* Build configuration list for PBXNativeTarget "LoopScrollViewTests" */;
-			buildPhases = (
-				991E43D01A3EED4B003792CA /* Sources */,
-				991E43D11A3EED4B003792CA /* Frameworks */,
-				991E43D21A3EED4B003792CA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				991E43D61A3EED4B003792CA /* PBXTargetDependency */,
-			);
-			name = LoopScrollViewTests;
-			productName = LoopScrollViewTests;
-			productReference = 991E43D41A3EED4B003792CA /* LoopScrollViewTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -168,10 +110,6 @@
 				TargetAttributes = {
 					991E43BA1A3EED4B003792CA = {
 						CreatedOnToolsVersion = 6.1.1;
-					};
-					991E43D31A3EED4B003792CA = {
-						CreatedOnToolsVersion = 6.1.1;
-						TestTargetID = 991E43BA1A3EED4B003792CA;
 					};
 				};
 			};
@@ -189,7 +127,6 @@
 			projectRoot = "";
 			targets = (
 				991E43BA1A3EED4B003792CA /* LoopScrollView */,
-				991E43D31A3EED4B003792CA /* LoopScrollViewTests */,
 			);
 		};
 /* End PBXProject section */
@@ -202,13 +139,6 @@
 				991E43CA1A3EED4B003792CA /* Main.storyboard in Resources */,
 				991E43CF1A3EED4B003792CA /* LaunchScreen.xib in Resources */,
 				991E43CC1A3EED4B003792CA /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		991E43D21A3EED4B003792CA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,23 +155,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		991E43D01A3EED4B003792CA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				991E43DB1A3EED4B003792CA /* LoopScrollViewTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		991E43D61A3EED4B003792CA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 991E43BA1A3EED4B003792CA /* LoopScrollView */;
-			targetProxy = 991E43D51A3EED4B003792CA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		991E43C81A3EED4B003792CA /* Main.storyboard */ = {
@@ -297,7 +211,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -332,7 +246,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -359,40 +273,6 @@
 			};
 			name = Release;
 		};
-		991E43E21A3EED4B003792CA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LoopScrollViewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopScrollView.app/LoopScrollView";
-			};
-			name = Debug;
-		};
-		991E43E31A3EED4B003792CA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LoopScrollViewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopScrollView.app/LoopScrollView";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -410,14 +290,6 @@
 			buildConfigurations = (
 				991E43DF1A3EED4B003792CA /* Debug */,
 				991E43E01A3EED4B003792CA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		991E43E11A3EED4B003792CA /* Build configuration list for PBXNativeTarget "LoopScrollViewTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				991E43E21A3EED4B003792CA /* Debug */,
-				991E43E31A3EED4B003792CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
