@@ -26,10 +26,10 @@
     [self.imageUrls addObject:@"http://pic21.nipic.com/20120609/6434097_090837003325_2.jpg"];
     [self.imageUrls addObject:@"http://www.geyinzan.com/9fd66971-photo-idate/album/images/cms/20130228/20130228094535195Eh3.jpg"];
     [self.imageUrls addObject:@"http://image.zcool.com.cn/2013/52/40/m_1375164283803.jpg"];
-//    [self.imageUrls addObject:@"http://pic26.nipic.com/20130112/11528051_231738456000_2.jpg"];
-//    [self.imageUrls addObject:@"http://pic.58pic.com/58pic/11/26/94/20i58PICndR.jpg"];
-//    [self.imageUrls addObject:@"http://img.aiimg.com/uploads/allimg/140530/1-140530230213.jpg"];
-//    [self.imageUrls addObject:@"http://pic2.ooopic.com/11/73/34/70bOOOPIC6d_1024.jpg"];
+    [self.imageUrls addObject:@"http://pic26.nipic.com/20130112/11528051_231738456000_2.jpg"];
+    [self.imageUrls addObject:@"http://pic.58pic.com/58pic/11/26/94/20i58PICndR.jpg"];
+    [self.imageUrls addObject:@"http://img.aiimg.com/uploads/allimg/140530/1-140530230213.jpg"];
+    [self.imageUrls addObject:@"http://pic2.ooopic.com/11/73/34/70bOOOPIC6d_1024.jpg"];
 }
 
 
