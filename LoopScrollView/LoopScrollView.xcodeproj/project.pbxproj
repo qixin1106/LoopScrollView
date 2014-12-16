@@ -16,7 +16,7 @@
 		991E43E91A3EEDDC003792CA /* QXLoopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 991E43E61A3EEDDC003792CA /* QXLoopScrollView.m */; };
 		991E43EA1A3EEDDC003792CA /* QXScrollViewPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 991E43E81A3EEDDC003792CA /* QXScrollViewPageControl.m */; };
 		991E43EE1A3EEE6F003792CA /* ImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 991E43ED1A3EEE6F003792CA /* ImageLoader.m */; };
-		9964ED1F1A3FE1CD00C6CAF9 /* loopView.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9964ED1E1A3FE1CD00C6CAF9 /* loopView.gif */; };
+		9964ED211A3FE42300C6CAF9 /* loopView.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9964ED201A3FE42300C6CAF9 /* loopView.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +36,7 @@
 		991E43E81A3EEDDC003792CA /* QXScrollViewPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QXScrollViewPageControl.m; sourceTree = "<group>"; };
 		991E43EC1A3EEE6F003792CA /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoader.h; sourceTree = "<group>"; };
 		991E43ED1A3EEE6F003792CA /* ImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLoader.m; sourceTree = "<group>"; };
-		9964ED1E1A3FE1CD00C6CAF9 /* loopView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loopView.gif; sourceTree = "<group>"; };
+		9964ED201A3FE42300C6CAF9 /* loopView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loopView.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +53,7 @@
 		991E43B21A3EED4B003792CA = {
 			isa = PBXGroup;
 			children = (
-				9964ED1E1A3FE1CD00C6CAF9 /* loopView.gif */,
+				9964ED201A3FE42300C6CAF9 /* loopView.gif */,
 				991E43BD1A3EED4B003792CA /* LoopScrollView */,
 				991E43BC1A3EED4B003792CA /* Products */,
 			);
@@ -171,7 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				991E43CA1A3EED4B003792CA /* Main.storyboard in Resources */,
-				9964ED1F1A3FE1CD00C6CAF9 /* loopView.gif in Resources */,
+				9964ED211A3FE42300C6CAF9 /* loopView.gif in Resources */,
 				991E43CF1A3EED4B003792CA /* LaunchScreen.xib in Resources */,
 				991E43CC1A3EED4B003792CA /* Images.xcassets in Resources */,
 			);

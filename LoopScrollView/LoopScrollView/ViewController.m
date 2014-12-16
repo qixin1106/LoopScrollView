@@ -30,6 +30,7 @@
     [self.imageUrls addObject:@"http://pic.58pic.com/58pic/11/26/94/20i58PICndR.jpg"];
     [self.imageUrls addObject:@"http://img.aiimg.com/uploads/allimg/140530/1-140530230213.jpg"];
     [self.imageUrls addObject:@"http://pic2.ooopic.com/11/73/34/70bOOOPIC6d_1024.jpg"];
+    
 }
 
 
@@ -45,7 +46,9 @@
     self.loopScrollView = [[QXLoopScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 140)];
     self.loopScrollView.delegate = self;
     [self.view addSubview:self.loopScrollView];
+
     self.loopScrollView.imgUrls = self.imageUrls;
+
 }
 
 #pragma mark - QXLoopScrollViewDelegate
