@@ -8,8 +8,6 @@
 #import "ImageLoader.h"
 #import "QXScrollViewPageControl.h"
 
-#define SH   [UIScreen mainScreen].bounds.size.height
-#define SW   [UIScreen mainScreen].bounds.size.width
 #define TOTAL_IMG 3
 
 
@@ -24,6 +22,10 @@
 
 @implementation QXLoopScrollView
 
+- (void)dealloc
+{
+    [self stopTimer];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -58,27 +60,35 @@
             [self.imageViews addObject:imgBtn];
             [self.scrollView addSubview:imgBtn];
         }
-        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+        //self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
 
-        self.pageView = [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
-                                                                                  self.bounds.size.height-1.5,
-                                                                                  self.bounds.size.width,
-                                                                                  1.5)];
+        self.pageView =
+        [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
+                                                                  self.bounds.size.height-1.5,
+                                                                  self.bounds.size.width,
+                                                                  1.5)];
         [self addSubview:self.pageView];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [self stopTimer];
-}
+
+
+
+
+
+
+
+
 
 #pragma mark - 计时器
 - (void)startTimer
 {
     [self stopTimer];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleTimer:) userInfo:nil repeats:YES];
+    if (self.imgUrls.count>1)
+    {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleTimer:) userInfo:nil repeats:YES];
+    }
 }
 
 
@@ -87,6 +97,8 @@
     [self.timer invalidate];
     self.timer = nil;
 }
+
+
 
 - (void)handleTimer:(NSTimer*)sender
 {
@@ -97,11 +109,22 @@
 
 
 
+
+
+
+
 #pragma mark - 获取url的index
 - (int)indexWithUrl:(NSString*)url
 {
     return [[self.indexDict objectForKey:url] intValue];
 }
+
+
+
+
+
+
+
 
 
 #pragma mark - 赋值入口(数据唯一来源)
@@ -116,6 +139,7 @@
 
         //创建page指示
         [self.pageView createPageBoxWithCount:_imgUrls.count];
+        
         //保存每个索引,以url当做唯一标示key,value是顺序,由此可以得知当前url的正常排序是第几个
         [self.indexDict removeAllObjects];
         for (int i = 0; i < _imgUrls.count; i++)
@@ -124,13 +148,16 @@
             [self.indexDict setObject:[NSNumber numberWithInt:i] forKey:url];
         }
         //因为实际上中间的按钮显示第一个图片,因此需要将图片数据左移
-        if (_imgUrls.count>=3)
-        {
-            [self goLeft];
-        }
+        [self goLeft];
         [self startTimer];
     }
 }
+
+
+
+
+
+
 
 
 #pragma mark - 点击按钮
@@ -143,16 +170,29 @@
 }
 
 
+
+
+
+
+
+
+
+
+
 #pragma mark - 刷新图片
 - (void)refreshImage
 {
-    self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
-    NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;    
+    if (self.imgUrls.count>1)
+    {
+        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+    }
     
-    for (int i = 0; i < count; i++)
+    NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
+    
+    for (int i = 0; i < 3; i++)
     {
         UIButton *btn = [self.imageViews objectAtIndex:i];
-        NSString *url = [self.imgUrls objectAtIndex:i];
+        NSString *url = [self.imgUrls objectAtIndex:i%count];
         btn.tag = [self indexWithUrl:url];
         if (i==1)
         {
@@ -166,6 +206,16 @@
          }];
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -187,10 +237,25 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self startTimer];
+    //float offset = (self.imgUrls.count>3)?2*self.bounds.size.width:self.bounds.size.width;
     if (scrollView.contentOffset.x>=2*self.bounds.size.width)
     {
         [self goRight];

@@ -61,9 +61,8 @@
 
 - (void)selectIndex:(NSInteger)index
 {
-    __weak QXScrollViewPageControl *weakSelf = self;
     [UIView animateWithDuration:0.25f animations:^{
-        weakSelf.indicatorView.frame = [[weakSelf.frames objectAtIndex:index] CGRectValue];
+        self.indicatorView.frame = [[self.frames objectAtIndex:index] CGRectValue];
     }];
 }
 

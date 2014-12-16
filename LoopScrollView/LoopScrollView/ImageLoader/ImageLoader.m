@@ -161,7 +161,7 @@
         {
             @autoreleasepool
             {
-                printf("\nload cache Image %s\n",[imagePath UTF8String]);
+                //printf("\nload cache Image %s\n",[imagePath UTF8String]);
                 NSData *imgData = [NSData dataWithContentsOfFile:imagePath
                                                          options:NSDataReadingMapped
                                                            error:nil];
@@ -173,7 +173,7 @@
     {
         if (blk)
         {
-            printf("\nload placeholder need download image%s\n",[imagePath UTF8String]);
+            //printf("\nload placeholder need download image%s\n",[imagePath UTF8String]);
             blk(placeholder);
         }
         
@@ -192,7 +192,7 @@
                 {
                     if ([imgData writeToFile:imagePath atomically:YES])
                     {
-                        printf("\nsave Image %s\n",[imagePath UTF8String]);
+                        //printf("\nsave Image %s\n",[imagePath UTF8String]);
                         NSData *data = [NSData dataWithContentsOfFile:imagePath
                                                               options:NSDataReadingMapped
                                                                 error:nil];
@@ -224,7 +224,7 @@
     {
         if (failure)
         {
-            printf("\nbad url\n");
+            //printf("\nbad url\n");
             failure();
         }
         return;
@@ -251,7 +251,7 @@
         {
             @autoreleasepool
             {
-                printf("\nload cache Image %s\n",[imagePath UTF8String]);
+                //printf("\nload cache Image %s\n",[imagePath UTF8String]);
                 NSData *imgData = [NSData dataWithContentsOfFile:imagePath
                                                          options:NSDataReadingMapped
                                                            error:nil];
@@ -275,7 +275,7 @@
                 {
                     if ([imgData writeToFile:imagePath atomically:YES])
                     {
-                        printf("\nsave Image %s\n",[imagePath UTF8String]);
+                        //printf("\nsave Image %s\n",[imagePath UTF8String]);
                         NSData *data = [NSData dataWithContentsOfFile:imagePath
                                                               options:NSDataReadingMapped
                                                                 error:nil];
@@ -291,7 +291,7 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (failure)
                             {
-                                printf("\nsave Image Error\n");
+                                //printf("\nsave Image Error\n");
                                 failure();
                             }
                         });
@@ -302,7 +302,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (failure)
                         {
-                            printf("\ndownLoad error or data is not a image\n");
+                            //printf("\ndownLoad error or data is not a image\n");
                             failure();
                         }
                     });
