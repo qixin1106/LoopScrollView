@@ -35,7 +35,6 @@
         self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
         self.indexDict = [NSMutableDictionary dictionary];
 
-
         self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         self.scrollView.delegate = self;
         self.scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
@@ -160,6 +159,7 @@
 
 
 
+
 #pragma mark - 点击按钮
 - (void)clickBtn:(UIButton*)sender
 {
@@ -186,24 +186,31 @@
     {
         self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
     }
-    
+  
+  NSLog(@"%f", self.scrollView.contentOffset.x);
+  
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
     for (int i = 0; i < 3; i++)
     {
         UIButton *btn = [self.imageViews objectAtIndex:i];
-        NSString *url = [self.imgUrls objectAtIndex:i%count];
-        btn.tag = [self indexWithUrl:url];
+        NSString *image = [self.imgUrls objectAtIndex:i%count];
+        btn.tag = [self indexWithUrl:image];
         if (i==1)
         {
             [self.pageView selectIndex:btn.tag];
         }
-        [ImageLoader getImageWithURL:url
-                         placeholder:nil
-                               block:^(UIImage *img)
-         {
-             [btn setImage:img forState:UIControlStateNormal];
-         }];
+        
+        if ([image isKindOfClass:[UIImage class]]) {
+            [btn setImage:(UIImage *)image forState:UIControlStateNormal];
+        } else if ([image isKindOfClass:[NSString class]]) {
+            [ImageLoader getImageWithURL:image
+                             placeholder:nil
+                                   block:^(UIImage *img)
+             {
+                 [btn setImage:img forState:UIControlStateNormal];
+             }];
+        }
     }
 }
 
