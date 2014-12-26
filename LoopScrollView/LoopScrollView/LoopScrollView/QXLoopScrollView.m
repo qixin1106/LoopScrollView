@@ -105,10 +105,7 @@
         self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
         
         self.pageView =
-        [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
-                                                                  self.bounds.size.height-1.5,
-                                                                  self.bounds.size.width,
-                                                                  1.5)];
+        [[QXScrollViewPageControl alloc] initWithFrame:CGRectZero];
         [self addSubview:self.pageView];
     }
     return self;
@@ -118,18 +115,18 @@
 //动态调整subview的frame
 - (void)layoutSubviews {
     [super layoutSubviews];
-   
-    NSLog(@"%@", NSStringFromCGRect(self.bounds));
+    
+    self.pageView.frame = CGRectMake(0,
+               self.bounds.size.height-1.5,
+               self.bounds.size.width,
+                                     1.5);
     self.scrollView.frame = self.bounds;
     [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
         view.frame = CGRectMake(idx*self.bounds.size.width,
                                   0,
                                   self.bounds.size.width,
                                   self.bounds.size.height);
-        NSLog(@"view.frame = %@", NSStringFromCGRect(view.frame));
     }];
-    
-    
 }
 
 
@@ -254,7 +251,6 @@
         UIButton *btn = [self.imageViews objectAtIndex:i];
         NSString *image = [self.imgUrls objectAtIndex:i%count];
         
-        NSLog(@"btn: %@, index = %d ", btn, i);
         btn.tag = [self indexWithUrl:image];
         if (i==1)
         {
