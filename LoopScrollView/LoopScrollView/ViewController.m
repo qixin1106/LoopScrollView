@@ -10,7 +10,7 @@
 #import "QXLoopScrollView.h"
 
 @interface ViewController () <QXLoopScrollViewDelegate>
-@property (strong, nonatomic) QXLoopScrollView *loopScrollView;
+@property (strong, nonatomic) IBOutlet QXLoopScrollView *loopScrollView;
 @property (strong, nonatomic) NSMutableArray *imageUrls;
 @end
 
@@ -43,7 +43,7 @@
     [self loadTestData];
 
     //MARK: 使用示例
-    self.loopScrollView = [[QXLoopScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 140)];
+//    self.loopScrollView = [[QXLoopScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 140)];
     self.loopScrollView.delegate = self;
     [self.view addSubview:self.loopScrollView];
 

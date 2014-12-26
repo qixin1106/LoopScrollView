@@ -35,44 +35,90 @@
         self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
         self.indexDict = [NSMutableDictionary dictionary];
 
-
-        self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        self.scrollView.delegate = self;
-        self.scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
-        self.scrollView.pagingEnabled = YES;
-        self.scrollView.showsHorizontalScrollIndicator = NO;
-        self.scrollView.showsVerticalScrollIndicator = NO;
         [self addSubview:self.scrollView];
+        [self setupReusableButtons];
+        [self addSubview:self.pageView];
 
-        for (int i = 0; i < TOTAL_IMG; i++)
-        {
-            UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            imgBtn.frame = CGRectMake(i*self.bounds.size.width,
-                                      0,
-                                      self.bounds.size.width,
-                                      self.bounds.size.height);
-            [imgBtn addTarget:self
-                       action:@selector(clickBtn:)
-             forControlEvents:UIControlEventTouchUpInside];
-            [imgBtn setImage:nil
-                    forState:UIControlStateNormal];
-            imgBtn.exclusiveTouch = YES;
-            [self.imageViews addObject:imgBtn];
-            [self.scrollView addSubview:imgBtn];
-        }
-        //self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+    }
+    return self;
+}
 
-        self.pageView =
-        [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
-                                                                  self.bounds.size.height-1.5,
-                                                                  self.bounds.size.width,
-                                                                  1.5)];
+//适用于xib以及storyboard的方法。
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
+        self.indexDict = [NSMutableDictionary dictionary];
+        
+        [self addSubview:self.scrollView];
+        [self setupReusableButtons];
         [self addSubview:self.pageView];
     }
     return self;
 }
 
+// 添加button
+- (void)setupReusableButtons {
+    
+    for (int i = 0; i < TOTAL_IMG; i++)
+    {
+        UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        [imgBtn addTarget:self
+                   action:@selector(clickBtn:)
+         forControlEvents:UIControlEventTouchUpInside];
+        [imgBtn setImage:nil
+                forState:UIControlStateNormal];
+        imgBtn.exclusiveTouch = YES;
+        [self.imageViews addObject:imgBtn];
+        [self.scrollView addSubview:imgBtn];
+    }
+    self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+}
 
+// 视图懒加载
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+        _scrollView.delegate = self;
+        _scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
+        _scrollView.pagingEnabled = YES;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.autoresizingMask = 0xf;
+    }
+    
+    return _scrollView;
+}
+
+//视图懒加载
+- (QXScrollViewPageControl *)pageView {
+    if (!_pageView) {
+        _pageView = [[QXScrollViewPageControl alloc] initWithFrame:CGRectZero];
+    }
+    return _pageView;
+}
+
+
+//动态调整subview的frame
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.pageView.frame = CGRectMake(0,
+               self.bounds.size.height-1.5,
+               self.bounds.size.width,
+                                     1.5);
+    
+    self.scrollView.frame = self.bounds;
+    
+    [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+        view.frame = CGRectMake(idx*self.bounds.size.width,
+                                  0,
+                                  self.bounds.size.width,
+                                  self.bounds.size.height);
+    }];
+}
 
 
 
@@ -160,6 +206,7 @@
 
 
 
+
 #pragma mark - 点击按钮
 - (void)clickBtn:(UIButton*)sender
 {
@@ -184,26 +231,33 @@
 {
     if (self.imgUrls.count>1)
     {
-        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
     }
-    
+  
+  
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
     for (int i = 0; i < 3; i++)
     {
         UIButton *btn = [self.imageViews objectAtIndex:i];
-        NSString *url = [self.imgUrls objectAtIndex:i%count];
-        btn.tag = [self indexWithUrl:url];
+        NSString *image = [self.imgUrls objectAtIndex:i%count];
+        
+        btn.tag = [self indexWithUrl:image];
         if (i==1)
         {
             [self.pageView selectIndex:btn.tag];
         }
-        [ImageLoader getImageWithURL:url
-                         placeholder:nil
-                               block:^(UIImage *img)
-         {
-             [btn setImage:img forState:UIControlStateNormal];
-         }];
+        
+        if ([image isKindOfClass:[UIImage class]]) {
+            [btn setImage:(UIImage *)image forState:UIControlStateNormal];
+        } else if ([image isKindOfClass:[NSString class]]) {
+            [ImageLoader getImageWithURL:image
+                             placeholder:nil
+                                   block:^(UIImage *img)
+             {
+                 [btn setImage:img forState:UIControlStateNormal];
+             }];
+        }
     }
 }
 
@@ -226,6 +280,8 @@
     [self.imgUrls removeObjectAtIndex:0];
     [self.imgUrls addObject:url];
     [self refreshImage];
+    
+    
 }
 
 - (void)goLeft
