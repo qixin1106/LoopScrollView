@@ -32,7 +32,6 @@
 @interface QXLoopScrollView : UIView
 @property (weak, nonatomic) id<QXLoopScrollViewDelegate>delegate;
 @property (strong, nonatomic) NSMutableArray *imgUrls;
-@property (strong, nonatomic) NSMutableArray *images;
 @end
 
 
