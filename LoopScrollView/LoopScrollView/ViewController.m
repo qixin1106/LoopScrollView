@@ -43,7 +43,7 @@
     [self loadTestData];
 
     //MARK: 使用示例
-    self.loopScrollView = [[QXLoopScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 140)];
+//    self.loopScrollView = [[QXLoopScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 140)];
     self.loopScrollView.delegate = self;
     [self.view addSubview:self.loopScrollView];
 
