@@ -10,7 +10,7 @@
 #import "QXLoopScrollView.h"
 
 @interface ViewController () <QXLoopScrollViewDelegate>
-@property (strong, nonatomic) QXLoopScrollView *loopScrollView;
+@property (strong, nonatomic) IBOutlet QXLoopScrollView *loopScrollView;
 @property (strong, nonatomic) NSMutableArray *imageUrls;
 @end
 

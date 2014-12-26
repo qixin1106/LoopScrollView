@@ -71,7 +71,66 @@
     return self;
 }
 
+//适用于xib以及storyboard的方法。
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
+        self.indexDict = [NSMutableDictionary dictionary];
+        
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+        self.scrollView.delegate = self;
+        self.scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
+        self.scrollView.pagingEnabled = YES;
+        self.scrollView.showsHorizontalScrollIndicator = NO;
+        self.scrollView.showsVerticalScrollIndicator = NO;
+        self.scrollView.autoresizingMask = 0B111111;
+        
+        [self addSubview:self.scrollView];
+        
+        for (int i = 0; i < TOTAL_IMG; i++)
+        {
+            UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 
+            [imgBtn addTarget:self
+                       action:@selector(clickBtn:)
+             forControlEvents:UIControlEventTouchUpInside];
+            [imgBtn setImage:nil
+                    forState:UIControlStateNormal];
+            imgBtn.exclusiveTouch = YES;
+            [self.imageViews addObject:imgBtn];
+            [self.scrollView addSubview:imgBtn];
+        }
+        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+        
+        self.pageView =
+        [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
+                                                                  self.bounds.size.height-1.5,
+                                                                  self.bounds.size.width,
+                                                                  1.5)];
+        [self addSubview:self.pageView];
+    }
+    return self;
+}
+
+
+//动态调整subview的frame
+- (void)layoutSubviews {
+    [super layoutSubviews];
+   
+    NSLog(@"%@", NSStringFromCGRect(self.bounds));
+    self.scrollView.frame = self.bounds;
+    [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+        view.frame = CGRectMake(idx*self.bounds.size.width,
+                                  0,
+                                  self.bounds.size.width,
+                                  self.bounds.size.height);
+        NSLog(@"view.frame = %@", NSStringFromCGRect(view.frame));
+    }];
+    
+    
+}
 
 
 
@@ -184,10 +243,9 @@
 {
     if (self.imgUrls.count>1)
     {
-        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
+        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
     }
   
-  NSLog(@"%f", self.scrollView.contentOffset.x);
   
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
@@ -195,6 +253,8 @@
     {
         UIButton *btn = [self.imageViews objectAtIndex:i];
         NSString *image = [self.imgUrls objectAtIndex:i%count];
+        
+        NSLog(@"btn: %@, index = %d ", btn, i);
         btn.tag = [self indexWithUrl:image];
         if (i==1)
         {
@@ -233,6 +293,8 @@
     [self.imgUrls removeObjectAtIndex:0];
     [self.imgUrls addObject:url];
     [self refreshImage];
+    
+    
 }
 
 - (void)goLeft
