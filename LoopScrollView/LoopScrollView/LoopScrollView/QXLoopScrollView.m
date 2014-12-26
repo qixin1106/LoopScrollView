@@ -63,14 +63,13 @@
     
     for (int i = 0; i < TOTAL_IMG; i++)
     {
-        UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImageView *imgBtn = [[UIImageView alloc] initWithFrame:CGRectZero];
+        imgBtn.userInteractionEnabled = YES;
         
-        [imgBtn addTarget:self
-                   action:@selector(clickBtn:)
-         forControlEvents:UIControlEventTouchUpInside];
-        [imgBtn setImage:nil
-                forState:UIControlStateNormal];
-        imgBtn.exclusiveTouch = YES;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBtn:)];
+        
+        [imgBtn addGestureRecognizer:tapGesture];
+        
         [self.imageViews addObject:imgBtn];
         [self.scrollView addSubview:imgBtn];
     }
@@ -208,11 +207,11 @@
 
 
 #pragma mark - 点击按钮
-- (void)clickBtn:(UIButton*)sender
+- (void)clickBtn:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(loopScrollViewDidSelectIndex:)])
     {
-        [self.delegate loopScrollViewDidSelectIndex:sender.tag];
+        [self.delegate loopScrollViewDidSelectIndex:[sender view].tag];
     }
 }
 
@@ -239,23 +238,23 @@
     
     for (int i = 0; i < 3; i++)
     {
-        UIButton *btn = [self.imageViews objectAtIndex:i];
+        UIImageView *imageView = [self.imageViews objectAtIndex:i];
         NSString *image = [self.imgUrls objectAtIndex:i%count];
         
-        btn.tag = [self indexWithUrl:image];
+        imageView.tag = [self indexWithUrl:image];
         if (i==1)
         {
-            [self.pageView selectIndex:btn.tag];
+            [self.pageView selectIndex:imageView.tag];
         }
         
         if ([image isKindOfClass:[UIImage class]]) {
-            [btn setImage:(UIImage *)image forState:UIControlStateNormal];
+            [imageView setImage:(UIImage *)image];
         } else if ([image isKindOfClass:[NSString class]]) {
             [ImageLoader getImageWithURL:image
                              placeholder:nil
                                    block:^(UIImage *img)
              {
-                 [btn setImage:img forState:UIControlStateNormal];
+                 [imageView setImage:img];
              }];
         }
     }

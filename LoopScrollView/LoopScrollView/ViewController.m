@@ -17,8 +17,6 @@
 @implementation ViewController
 
 
-
-
 - (void)loadTestData
 {
     self.imageUrls = [NSMutableArray array];
