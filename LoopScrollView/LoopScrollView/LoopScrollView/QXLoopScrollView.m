@@ -34,11 +34,11 @@
     {
         self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
         self.indexDict = [NSMutableDictionary dictionary];
-
+        
         [self addSubview:self.scrollView];
         [self setupReusableButtons];
         [self addSubview:self.pageView];
-
+        
     }
     return self;
 }
@@ -106,17 +106,18 @@
     [super layoutSubviews];
     
     self.pageView.frame = CGRectMake(0,
-               self.bounds.size.height-1.5,
-               self.bounds.size.width,
+                                     self.bounds.size.height-1.5,
+                                     self.bounds.size.width,
                                      1.5);
     
     self.scrollView.frame = self.bounds;
+    self.scrollView.contentInset = UIEdgeInsetsZero;
     
     [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
         view.frame = CGRectMake(idx*self.bounds.size.width,
-                                  0,
-                                  self.bounds.size.width,
-                                  self.bounds.size.height);
+                                0,
+                                self.bounds.size.width,
+                                self.bounds.size.height);
     }];
 }
 
@@ -182,7 +183,7 @@
         
         //小于等于1不能滑动
         self.scrollView.scrollEnabled = (_imgUrls.count<=1)?NO:YES;
-
+        
         //创建page指示
         [self.pageView createPageBoxWithCount:_imgUrls.count];
         
@@ -233,8 +234,8 @@
     {
         self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
     }
-  
-  
+    
+    
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
     for (int i = 0; i < 3; i++)
