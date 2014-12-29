@@ -9,8 +9,6 @@
 #import "QXScrollViewPageControl.h"
 
 #define TOTAL_IMG 3
-
-
 @interface NSTimer (EOCBlocksSupport)
 
 + (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
@@ -34,8 +32,10 @@
 
 - (void)dealloc
 {
+    NSLog(@"QXLoopScrollView dealloc");
     [self stopTimer];
 }
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -45,90 +45,44 @@
         self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
         self.indexDict = [NSMutableDictionary dictionary];
         
+        
+        self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        self.scrollView.delegate = self;
+        self.scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
+        self.scrollView.pagingEnabled = YES;
+        self.scrollView.showsHorizontalScrollIndicator = NO;
+        self.scrollView.showsVerticalScrollIndicator = NO;
         [self addSubview:self.scrollView];
-        [self setupReusableButtons];
+        
+        for (int i = 0; i < TOTAL_IMG; i++)
+        {
+            UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            imgBtn.frame = CGRectMake(i*self.bounds.size.width,
+                                      0,
+                                      self.bounds.size.width,
+                                      self.bounds.size.height);
+            [imgBtn addTarget:self
+                       action:@selector(clickBtn:)
+             forControlEvents:UIControlEventTouchUpInside];
+            [imgBtn setImage:nil
+                    forState:UIControlStateNormal];
+            imgBtn.exclusiveTouch = YES;
+            [self.imageViews addObject:imgBtn];
+            [self.scrollView addSubview:imgBtn];
+        }
+        
+        self.pageView =
+        [[QXScrollViewPageControl alloc] initWithFrame:CGRectMake(0,
+                                                                  self.bounds.size.height-1.5,
+                                                                  self.bounds.size.width,
+                                                                  1.5)];
         [self addSubview:self.pageView];
         
     }
     return self;
 }
 
-//适用于xib以及storyboard的方法。
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self) {
-        self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
-        self.indexDict = [NSMutableDictionary dictionary];
-        
-        [self addSubview:self.scrollView];
-        [self setupReusableButtons];
-        [self addSubview:self.pageView];
-    }
-    return self;
-}
 
-// 添加button
-- (void)setupReusableButtons {
-    
-    for (int i = 0; i < TOTAL_IMG; i++)
-    {
-        UIImageView *imgBtn = [[UIImageView alloc] initWithFrame:CGRectZero];
-        imgBtn.userInteractionEnabled = YES;
-        
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBtn:)];
-        
-        [imgBtn addGestureRecognizer:tapGesture];
-        
-        [self.imageViews addObject:imgBtn];
-        [self.scrollView addSubview:imgBtn];
-    }
-    self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
-}
-
-// 视图懒加载
-- (UIScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-        _scrollView.delegate = self;
-        _scrollView.contentSize = CGSizeMake(self.bounds.size.width*TOTAL_IMG, self.bounds.size.height);
-        _scrollView.pagingEnabled = YES;
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.autoresizingMask = 0xf;
-    }
-    
-    return _scrollView;
-}
-
-//视图懒加载
-- (QXScrollViewPageControl *)pageView {
-    if (!_pageView) {
-        _pageView = [[QXScrollViewPageControl alloc] initWithFrame:CGRectZero];
-    }
-    return _pageView;
-}
-
-
-//动态调整subview的frame
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    self.pageView.frame = CGRectMake(0,
-                                     self.bounds.size.height-1.5,
-                                     self.bounds.size.width,
-                                     1.5);
-    
-    self.scrollView.frame = self.bounds;
-    self.scrollView.contentInset = UIEdgeInsetsZero;
-    
-    [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
-        view.frame = CGRectMake(idx*self.bounds.size.width,
-                                0,
-                                self.bounds.size.width,
-                                self.bounds.size.height);
-    }];
-}
 
 
 
@@ -140,12 +94,11 @@
 #pragma mark - 计时器
 - (void)startTimer
 {
-
     [self stopTimer];
     if (self.imgUrls.count>1)
     {
         __weak QXLoopScrollView *wself = self;
-        self.timer = [NSTimer eoc_scheduledTimerWithTimeInterval:1.0f block:^{
+        self.timer = [NSTimer eoc_scheduledTimerWithTimeInterval:5.0f block:^{
             QXLoopScrollView *sself = wself;
             [sself handleTimer:nil];
         } repeats:YES];
@@ -163,6 +116,7 @@
 
 - (void)handleTimer:(NSTimer*)sender
 {
+    NSLog(@"自动轮播!");
     [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x+self.bounds.size.width, 0) animated:YES];
 }
 
@@ -221,13 +175,12 @@
 
 
 
-
 #pragma mark - 点击按钮
-- (void)clickBtn:(id)sender
+- (void)clickBtn:(UIButton*)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(loopScrollViewDidSelectIndex:)])
     {
-        [self.delegate loopScrollViewDidSelectIndex:[sender view].tag];
+        [self.delegate loopScrollViewDidSelectIndex:sender.tag];
     }
 }
 
@@ -246,33 +199,26 @@
 {
     if (self.imgUrls.count>1)
     {
-        self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
+        self.scrollView.contentOffset = CGPointMake(self.bounds.size.width, 0);
     }
-    
     
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
     for (int i = 0; i < 3; i++)
     {
-        UIImageView *imageView = [self.imageViews objectAtIndex:i];
-        NSString *image = [self.imgUrls objectAtIndex:i%count];
-        
-        imageView.tag = [self indexWithUrl:image];
+        UIButton *btn = [self.imageViews objectAtIndex:i];
+        NSString *url = [self.imgUrls objectAtIndex:i%count];
+        btn.tag = [self indexWithUrl:url];
         if (i==1)
         {
-            [self.pageView selectIndex:imageView.tag];
+            [self.pageView selectIndex:btn.tag];
         }
-        
-        if ([image isKindOfClass:[UIImage class]]) {
-            [imageView setImage:(UIImage *)image];
-        } else if ([image isKindOfClass:[NSString class]]) {
-            [ImageLoader getImageWithURL:image
-                             placeholder:nil
-                                   block:^(UIImage *img)
-             {
-                 [imageView setImage:img];
-             }];
-        }
+        [ImageLoader getImageWithURL:url
+                         placeholder:nil
+                               block:^(UIImage *img)
+         {
+             [btn setImage:img forState:UIControlStateNormal];
+         }];
     }
 }
 
@@ -295,8 +241,6 @@
     [self.imgUrls removeObjectAtIndex:0];
     [self.imgUrls addObject:url];
     [self refreshImage];
-    
-    
 }
 
 - (void)goLeft
@@ -325,7 +269,6 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    //float offset = (self.imgUrls.count>3)?2*self.bounds.size.width:self.bounds.size.width;
     if (scrollView.contentOffset.x>=2*self.bounds.size.width)
     {
         [self goRight];
@@ -348,11 +291,22 @@
     [self startTimer];
 }
 
+
 @end
 
 
 
 
+
+
+
+
+
+
+
+
+
+#pragma mark - 解决NSTimer循环引用
 @implementation NSTimer (EOCBlocksSupport)
 
 + (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
@@ -372,5 +326,8 @@
         block();
     }
 }
+
+
+
 
 @end
