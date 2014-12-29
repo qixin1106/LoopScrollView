@@ -11,6 +11,16 @@
 #define TOTAL_IMG 3
 
 
+@interface NSTimer (EOCBlocksSupport)
+
++ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
+                                          block:(void(^)())block
+                                        repeats:(BOOL)repeats;
+
+@end
+
+
+
 @interface QXLoopScrollView ()
 <UIScrollViewDelegate>
 @property (strong, nonatomic) NSMutableArray *imageViews;
@@ -34,11 +44,11 @@
     {
         self.imageViews = [NSMutableArray arrayWithCapacity:TOTAL_IMG];
         self.indexDict = [NSMutableDictionary dictionary];
-
+        
         [self addSubview:self.scrollView];
         [self setupReusableButtons];
         [self addSubview:self.pageView];
-
+        
     }
     return self;
 }
@@ -63,14 +73,13 @@
     
     for (int i = 0; i < TOTAL_IMG; i++)
     {
-        UIButton *imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImageView *imgBtn = [[UIImageView alloc] initWithFrame:CGRectZero];
+        imgBtn.userInteractionEnabled = YES;
         
-        [imgBtn addTarget:self
-                   action:@selector(clickBtn:)
-         forControlEvents:UIControlEventTouchUpInside];
-        [imgBtn setImage:nil
-                forState:UIControlStateNormal];
-        imgBtn.exclusiveTouch = YES;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBtn:)];
+        
+        [imgBtn addGestureRecognizer:tapGesture];
+        
         [self.imageViews addObject:imgBtn];
         [self.scrollView addSubview:imgBtn];
     }
@@ -106,17 +115,18 @@
     [super layoutSubviews];
     
     self.pageView.frame = CGRectMake(0,
-               self.bounds.size.height-1.5,
-               self.bounds.size.width,
+                                     self.bounds.size.height-1.5,
+                                     self.bounds.size.width,
                                      1.5);
     
     self.scrollView.frame = self.bounds;
+    self.scrollView.contentInset = UIEdgeInsetsZero;
     
     [self.imageViews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
         view.frame = CGRectMake(idx*self.bounds.size.width,
-                                  0,
-                                  self.bounds.size.width,
-                                  self.bounds.size.height);
+                                0,
+                                self.bounds.size.width,
+                                self.bounds.size.height);
     }];
 }
 
@@ -130,10 +140,15 @@
 #pragma mark - 计时器
 - (void)startTimer
 {
+
     [self stopTimer];
     if (self.imgUrls.count>1)
     {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleTimer:) userInfo:nil repeats:YES];
+        __weak QXLoopScrollView *wself = self;
+        self.timer = [NSTimer eoc_scheduledTimerWithTimeInterval:1.0f block:^{
+            QXLoopScrollView *sself = wself;
+            [sself handleTimer:nil];
+        } repeats:YES];
     }
 }
 
@@ -182,7 +197,7 @@
         
         //小于等于1不能滑动
         self.scrollView.scrollEnabled = (_imgUrls.count<=1)?NO:YES;
-
+        
         //创建page指示
         [self.pageView createPageBoxWithCount:_imgUrls.count];
         
@@ -208,11 +223,11 @@
 
 
 #pragma mark - 点击按钮
-- (void)clickBtn:(UIButton*)sender
+- (void)clickBtn:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(loopScrollViewDidSelectIndex:)])
     {
-        [self.delegate loopScrollViewDidSelectIndex:sender.tag];
+        [self.delegate loopScrollViewDidSelectIndex:[sender view].tag];
     }
 }
 
@@ -233,29 +248,29 @@
     {
         self.scrollView.contentOffset = CGPointMake(CGRectGetWidth(self.scrollView.frame), 0);
     }
-  
-  
+    
+    
     NSInteger count = (self.imgUrls.count<3)?self.imgUrls.count:3;
     
     for (int i = 0; i < 3; i++)
     {
-        UIButton *btn = [self.imageViews objectAtIndex:i];
+        UIImageView *imageView = [self.imageViews objectAtIndex:i];
         NSString *image = [self.imgUrls objectAtIndex:i%count];
         
-        btn.tag = [self indexWithUrl:image];
+        imageView.tag = [self indexWithUrl:image];
         if (i==1)
         {
-            [self.pageView selectIndex:btn.tag];
+            [self.pageView selectIndex:imageView.tag];
         }
         
         if ([image isKindOfClass:[UIImage class]]) {
-            [btn setImage:(UIImage *)image forState:UIControlStateNormal];
+            [imageView setImage:(UIImage *)image];
         } else if ([image isKindOfClass:[NSString class]]) {
             [ImageLoader getImageWithURL:image
                              placeholder:nil
                                    block:^(UIImage *img)
              {
-                 [btn setImage:img forState:UIControlStateNormal];
+                 [imageView setImage:img];
              }];
         }
     }
@@ -310,7 +325,6 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self startTimer];
     //float offset = (self.imgUrls.count>3)?2*self.bounds.size.width:self.bounds.size.width;
     if (scrollView.contentOffset.x>=2*self.bounds.size.width)
     {
@@ -334,5 +348,29 @@
     [self startTimer];
 }
 
+@end
+
+
+
+
+@implementation NSTimer (EOCBlocksSupport)
+
++ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
+                                          block:(void(^)())block
+                                        repeats:(BOOL)repeats
+{
+    return [self scheduledTimerWithTimeInterval:interval
+                                         target:self
+                                       selector:@selector(eoc_blockInvoke:)
+                                       userInfo:[block copy]
+                                        repeats:repeats];
+}
+
++ (void)eoc_blockInvoke:(NSTimer*)timer {
+    void (^block)() = timer.userInfo;
+    if (block) {
+        block();
+    }
+}
 
 @end
