@@ -11,6 +11,16 @@
 #define TOTAL_IMG 3
 
 
+@interface NSTimer (EOCBlocksSupport)
+
++ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
+                                          block:(void(^)())block
+                                        repeats:(BOOL)repeats;
+
+@end
+
+
+
 @interface QXLoopScrollView ()
 <UIScrollViewDelegate>
 @property (strong, nonatomic) NSMutableArray *imageViews;
@@ -130,10 +140,15 @@
 #pragma mark - 计时器
 - (void)startTimer
 {
+
     [self stopTimer];
     if (self.imgUrls.count>1)
     {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleTimer:) userInfo:nil repeats:YES];
+        __weak QXLoopScrollView *wself = self;
+        self.timer = [NSTimer eoc_scheduledTimerWithTimeInterval:1.0f block:^{
+            QXLoopScrollView *sself = wself;
+            [sself handleTimer:nil];
+        } repeats:YES];
     }
 }
 
@@ -310,7 +325,6 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self startTimer];
     //float offset = (self.imgUrls.count>3)?2*self.bounds.size.width:self.bounds.size.width;
     if (scrollView.contentOffset.x>=2*self.bounds.size.width)
     {
@@ -334,5 +348,30 @@
     [self startTimer];
 }
 
+
+@end
+
+
+
+
+@implementation NSTimer (EOCBlocksSupport)
+
++ (NSTimer *)eoc_scheduledTimerWithTimeInterval:(NSTimeInterval)interval
+                                          block:(void(^)())block
+                                        repeats:(BOOL)repeats
+{
+    return [self scheduledTimerWithTimeInterval:interval
+                                         target:self
+                                       selector:@selector(eoc_blockInvoke:)
+                                       userInfo:[block copy]
+                                        repeats:repeats];
+}
+
++ (void)eoc_blockInvoke:(NSTimer*)timer {
+    void (^block)() = timer.userInfo;
+    if (block) {
+        block();
+    }
+}
 
 @end
