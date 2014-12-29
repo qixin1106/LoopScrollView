@@ -348,7 +348,6 @@
     [self startTimer];
 }
 
-
 @end
 
 
